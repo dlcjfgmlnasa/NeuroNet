@@ -1,6 +1,8 @@
 # NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG
 
->**More details on the paper can be found [here](https://arxiv.org/abs/2404.17585).**
+>**Cheol-Hui Lee, Hakseung Kim, Hyun-jee Han, Min-Kyung Jung, Byung C. Yoon and Dong-Joo Kim**
+
+[[`Paper`](https://arxiv.org/abs/2404.17585)] [[`BibTeX`](#license-and-citation)]
 
 ![neuronet structure](https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/model_structure.jpg)
 
@@ -11,7 +13,10 @@ The classification of sleep stages is a pivotal aspect of diagnosing sleep disor
 
 ## Main Result 🥇
 
-![main result](https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg){: width="50%" height="50%"}
+- *Performance of Sleep-EDFX across various self-supervised learning and supervised learning*
+<p align="center">
+      <img src="https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg" alt="image" width="60%" height="auto">
+</p>
 
 ## License and Citation 📰
 The software is licensed under the Apache License 2.0. Please cite the following paper if you have used this code:
