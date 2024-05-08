@@ -11,10 +11,12 @@ The classification of sleep stages is a pivotal aspect of diagnosing sleep disor
 ## License and Citation 📰
 The software is licensed under the Apache License 2.0. Please cite the following paper if you have used this code:
 ```
-@inproceedings{Lee2024NeuroNetAN,
-  title={NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG},
-  author={Cheol-Hui Lee and Hakseung Kim and Hyun-jee Han and Min-Kyung Jung and Byung C. Yoon and Dong-Joo Kim},
-  year={2024},
-  url={https://api.semanticscholar.org/CorpusID:269449648}
+@misc{lee2024neuronet,
+      title={NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG}, 
+      author={Cheol-Hui Lee and Hakseung Kim and Hyun-jee Han and Min-Kyung Jung and Byung C. Yoon and Dong-Joo Kim},
+      year={2024},
+      eprint={2404.17585},
+      archivePrefix={arXiv},
+      primaryClass={cs.HC}
 }
 ```
