@@ -9,6 +9,9 @@ The classification of sleep stages is a pivotal aspect of diagnosing sleep disor
 
 ## Highlights ✨
 
+## Main Result 🥇
+
+![main result](https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg){: width="50%" height="50%"}
 
 ## License and Citation 📰
 The software is licensed under the Apache License 2.0. Please cite the following paper if you have used this code:
