@@ -13,10 +13,17 @@ The classification of sleep stages is a pivotal aspect of diagnosing sleep disor
 
 ## Main Result 🥇
 
-- *Performance of Sleep-EDFX across various self-supervised learning and supervised learning*
-<p align="center">
-      <img src="https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg" alt="image" width="60%" height="auto">
-</p>
+<details>
+<summary> <i> <b> Performance of Sleep-EDFX across various self-supervised learning and supervised learning </b> </i> </summary>
+<p align="center"> <img src="https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg" alt="image" width="60%" height="auto"> </p>
+</details>
+
+<details>
+<summary> <i> <b>  The output hypnograms across five sleep stages. </b> </i> </summary>
+<p align="center"> <img src="https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/hypnogram.jpg" alt="image"> </p>
+The first, second, and third columns correspond to #sc4031e0, #shhs1-204928, and #subject-53 within Sleep-EDFX, SHHS, and ISRUC, respectively. (A) is manually scored by a sleep expert. (B) and (C) respectively represent NeuroNet-B and NeuroNet-T. The first row for both (B) and (C) displays the results for NeuroNet+TCM, while the second row shows the results for NeuroNet. The errors are marked by the red dots.
+</details>
+
 
 ## License and Citation 📰
 The software is licensed under the Apache License 2.0. Please cite the following paper if you have used this code:
