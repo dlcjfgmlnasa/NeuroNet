@@ -1,11 +1,4 @@
 # NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neuronet-a-novel-hybrid-self-supervised/sleep-stage-detection-on-sleep-edfx)](https://paperswithcode.com/sota/sleep-stage-detection-on-sleep-edfx?p=neuronet-a-novel-hybrid-self-supervised)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neuronet-a-novel-hybrid-self-supervised/sleep-stage-detection-on-sleep-edfx-single)](https://paperswithcode.com/sota/sleep-stage-detection-on-sleep-edfx-single?p=neuronet-a-novel-hybrid-self-supervised)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neuronet-a-novel-hybrid-self-supervised/sleep-stage-detection-on-shhs)](https://paperswithcode.com/sota/sleep-stage-detection-on-shhs?p=neuronet-a-novel-hybrid-self-supervised)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neuronet-a-novel-hybrid-self-supervised/sleep-stage-detection-on-shhs-single-channel)](https://paperswithcode.com/sota/sleep-stage-detection-on-shhs-single-channel?p=neuronet-a-novel-hybrid-self-supervised)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neuronet-a-novel-hybrid-self-supervised/sleep-stage-detection-on-isruc-sleep)](https://paperswithcode.com/sota/sleep-stage-detection-on-isruc-sleep?p=neuronet-a-novel-hybrid-self-supervised)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neuronet-a-novel-hybrid-self-supervised/sleep-stage-detection-on-isruc-sleep-single)](https://paperswithcode.com/sota/sleep-stage-detection-on-isruc-sleep-single?p=neuronet-a-novel-hybrid-self-supervised)
-
 
 >**Cheol-Hui Lee, Hakseung Kim, Hyun-jee Han, Min-Kyung Jung, Byung C. Yoon and Dong-Joo Kim**
 
