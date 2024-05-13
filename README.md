@@ -16,7 +16,7 @@ The classification of sleep stages is a pivotal aspect of diagnosing sleep disor
 
 <details>
 <summary> <i> <b> Performance of Sleep-EDFX across various self-supervised learning and supervised learning </b> </i> </summary>
-<p align="center"> <img src="https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg" alt="image" width="60%" height="auto"> </p>
+<p align="center"> <img src="https://github.com/dlcjfgmlnasa/NeuroNet/blob/main/figures/overview.jpg" alt="image" width="80%" height="auto"> </p>
 </details>
 
 <details>
