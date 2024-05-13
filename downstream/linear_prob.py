@@ -11,7 +11,7 @@ from typing import List
 import torch.optim as opt
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import accuracy_score, f1_score
-from experiments.ssl_sleep.cm_eeg.model import ContraMaskedAutoEncoder, EncoderWrapper
+from models.neuronet.model import NeuroNet, NeuroNetEncoderWrapper
 
 
 warnings.filterwarnings(action='ignore')
@@ -30,9 +30,10 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 def get_args():
     file_name = 'mini'
     parser = argparse.ArgumentParser()
-    parser.add_argument('--n_fold', default=0, choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    parser.add_argument('--ckpt_path', default=os.path.join('..', '..', '..', 'ckpt',
-                                                            'ISRUC-Sleep', 'cm_eeg', file_name), type=str)
+    parser.add_argument('--k_splits', default=5)
+    parser.add_argument('--n_fold', default=0, choices=[0, 1, 2, 3, 4])
+    parser.add_argument('--ckpt_path', default=os.path.join('..', '..', '..', 'ckpt', 'Sleep-EDFX', file_name),
+                        type=str)
     parser.add_argument('--epochs', default=300, type=int)
     parser.add_argument('--batch_size', default=512, type=int)
     parser.add_argument('--lr', default=0.00005, type=float)
@@ -75,7 +76,6 @@ class Trainer(object):
         self.ckpt = torch.load(self.ckpt_path, map_location='cpu')
         self.sfreq, self.rfreq = self.ckpt['hyperparameter']['sfreq'], self.ckpt['hyperparameter']['rfreq']
         self.ft_paths, self.eval_paths = self.ckpt['paths']['ft_paths'], self.ckpt['paths']['eval_paths']
-        self.ft_paths = self.ft_paths + self.eval_paths[:int(len(self.eval_paths) // 3)]
         self.model = self.get_pretrained_model().to(device)
         self.optimizer = opt.AdamW(self.model.parameters(), lr=self.args.lr)
         self.scheduler = opt.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=self.args.epochs)
@@ -159,11 +159,11 @@ class Trainer(object):
     def get_pretrained_model(self):
         # 1. Prepared Pretrained Model
         model_parameter = self.ckpt['model_parameter']
-        pretrained_model = ContraMaskedAutoEncoder(**model_parameter)
+        pretrained_model = NeuroNet(**model_parameter)
         pretrained_model.load_state_dict(self.ckpt['model_state'])
 
         # 2. Encoder Wrapper
-        backbone = EncoderWrapper(
+        backbone = NeuroNetEncoderWrapper(
             fs=model_parameter['fs'], second=model_parameter['second'],
             time_window=model_parameter['time_window'], time_step=model_parameter['time_step'],
             frame_backbone=pretrained_model.frame_backbone,
@@ -185,19 +185,19 @@ class TorchDataset(Dataset):
     def __init__(self, paths: List, sfreq: int, rfreq: int):
         self.paths = paths
         self.info = mne.create_info(sfreq=sfreq, ch_types='eeg', ch_names=['Fp1'])
-        self.xs, self.ys = self.get_data()
+        self.xs, self.ys = self.get_data(rfreq)
 
     def __len__(self):
         return self.xs.shape[0]
 
-    def get_data(self):
+    def get_data(self, rfreq):
         xs, ys = [], []
         for path in self.paths:
             data = np.load(path)
             x, y = data['x'], data['y']
             x = np.expand_dims(x, axis=1)
             x = mne.EpochsArray(x, info=self.info)
-            x = x.resample(self.rfreq)
+            x = x.resample(rfreq)
             x = x.get_data().squeeze()
             xs.append(x)
             ys.append(y)
@@ -213,7 +213,7 @@ class TorchDataset(Dataset):
 
 if __name__ == '__main__':
     augments = get_args()
-    for n_fold in range(5, 10):
+    for n_fold in range(augments.k_splits):
         augments.n_fold = n_fold
         trainer = Trainer(augments)
         trainer.train()

@@ -1,0 +1,57 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="2052" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="3">
+            <item index="0" class="java.lang.String" itemvalue="scikit_learn" />
+            <item index="1" class="java.lang.String" itemvalue="lime" />
+            <item index="2" class="java.lang.String" itemvalue="numpy" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E127" />
+          <option value="E402" />
+          <option value="E701" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N801" />
+          <option value="N803" />
+          <option value="N802" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="sklearn" />
+          <option value="pyedflib" />
+          <option value="src.DeepSleepNet.test.f1_score" />
+          <option value="src.DeepSleepNet.test.accuracy_score" />
+          <option value="src.DeepSleepNet.test.cohen_kappa_score" />
+          <option value="src.DeepSleepNet.test.confusion_matrix" />
+          <option value="src.DeepSleepNet.test.classification_report" />
+          <option value="torch.device" />
+          <option value="mne_connectivity" />
+          <option value="models.model.total_recon_loss" />
+          <option value="float.__getitem__" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import torch.nn as nn
 from typing import List
-from models.neuronet.encoder import FrameBackBone
+from models.neuronet.resnet1d import FrameBackBone
 from timm.models.vision_transformer import Block
 from models.utils import get_2d_sincos_pos_embed_flexible
 from models.loss import NTXentLoss
@@ -248,7 +248,7 @@ def frame_size(fs, second, time_window, time_step):
     return frame.shape[1], frame.shape[2]
 
 
-class NeuroNetEncoder(nn.Module):
+class NeuroNetEncoderWrapper(nn.Module):
     def __init__(self, fs: int, second: int, time_window: int, time_step: float,
                  frame_backbone, patch_embed, encoder_block, encoder_norm, cls_token, pos_embed,
                  final_length):
@@ -267,7 +267,7 @@ class NeuroNetEncoder(nn.Module):
 
         self.final_length = final_length
 
-    def forward(self, x):
+    def forward(self, x, mode='cls_token'):
         # frame backbone
         x = self.make_frame(x)
         x = self.frame_backbone(x)
@@ -289,12 +289,12 @@ class NeuroNetEncoder(nn.Module):
 
         x = self.encoder_norm(x)
 
-        # if mode == 'cls_token':
-        #     x = x[:, :1, :].squeeze()
-        #     return x
-        # if mode == 'full':
-        #     x = x[:, 1:, :]
-        #     return x
+        if mode == 'cls_token':
+            x = x[:, :1, :].squeeze()
+            return x
+        if mode == 'full':
+            x = x[:, 1:, :]
+            return x
         return x
 
     def make_frame(self, x):
@@ -317,4 +317,5 @@ if __name__ == '__main__':
                   encoder_embed_dim=256, encoder_depths=6, encoder_heads=8,
                   decoder_embed_dim=128, decoder_heads=4, decoder_depths=8,
                   projection_hidden=[1024, 512])
-    m0.forward(x0, mask_ratio=0.5)
+    xx = m0(x0, mask_ratio=0.5)[0]
+    print(xx)

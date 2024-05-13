@@ -11,7 +11,7 @@ import torch.optim as opt
 from mamba_ssm import Mamba
 from models.utils import model_size
 from torch.utils.data import Dataset, DataLoader
-from experiments.ssl_sleep.cm_eeg.model import ContraMaskedAutoEncoder, EncoderWrapper
+from models.neuronet.model import NeuroNet, NeuroNetEncoderWrapper
 from sklearn.metrics import accuracy_score, f1_score
 
 
@@ -34,9 +34,10 @@ torch.backends.cuda.enable_math_sdp(True)
 def get_args():
     file_name = 'mini'
     parser = argparse.ArgumentParser()
+    parser.add_argument('--k_splits', default=5)
     parser.add_argument('--n_fold', default=1, choices=[0, 1, 2, 3, 4])
-    parser.add_argument('--ckpt_path', default=os.path.join('..', '..', '..', 'ckpt',
-                                                            'SHHS', 'cm_eeg', file_name), type=str)
+    parser.add_argument('--ckpt_path', default=os.path.join('..', '..', '..', 'ckpt', 'Sleep-EDFX', file_name),
+                        type=str)
     parser.add_argument('--temporal_context_length', default=20)
     parser.add_argument('--window_size', default=10)
     parser.add_argument('--epochs', default=150, type=int)
@@ -45,9 +46,8 @@ def get_args():
 
     parser.add_argument('--embed_dim', default=256)
     parser.add_argument('--temporal_context_modules', choices=['lstm', 'mha', 'lstm_mha', 'mamba'], default='mamba')
-    parser.add_argument('--save_path', default=os.path.join('..', '..', '..',
-                                                            'ckpt', 'SHHS', 'cm_eeg',
-                                                            file_name), type=str)
+    parser.add_argument('--save_path', default=os.path.join('..', '..', '..', 'ckpt', 'Sleep-EDFX', file_name),
+                        type=str)
     return parser.parse_args()
 
 
@@ -168,7 +168,6 @@ class Trainer(object):
 
         self.sfreq, self.rfreq = self.ckpt['hyperparameter']['sfreq'], self.ckpt['hyperparameter']['rfreq']
         self.ft_paths, self.eval_paths = self.ckpt['paths']['ft_paths'], self.ckpt['paths']['eval_paths']
-        self.ft_paths = self.ft_paths + self.eval_paths[:int(len(self.eval_paths) // 4)]
         self.model = self.get_pretrained_model().to(device)
 
         self.optimizer = opt.AdamW(self.model.parameters(), lr=self.args.lr)
@@ -253,7 +252,7 @@ class Trainer(object):
 
         save_path = os.path.join(self.args.ckpt_path, str(self.args.n_fold), 'fine_tuning', 'best_model.pth')
         torch.save({
-            'backbone_name': 'ContraMaskedAutoEncoder_FineTuning',
+            'backbone_name': 'NeuroNet_FineTuning',
             'model_state': model_state,
             'hyperparameter': self.args.__dict__,
             'result': {'real': real, 'pred': pred},
@@ -263,11 +262,11 @@ class Trainer(object):
     def get_pretrained_model(self):
         # 1. Prepared Pretrained Model
         model_parameter = self.ckpt['model_parameter']
-        pretrained_model = ContraMaskedAutoEncoder(**model_parameter)
+        pretrained_model = NeuroNet(**model_parameter)
         pretrained_model.load_state_dict(self.ckpt['model_state'])
 
         # 2. Encoder Wrapper
-        backbone = EncoderWrapper(
+        backbone = NeuroNetEncoderWrapper(
             fs=model_parameter['fs'], second=model_parameter['second'],
             time_window=model_parameter['time_window'], time_step=model_parameter['time_step'],
             frame_backbone=pretrained_model.frame_backbone,
@@ -356,7 +355,7 @@ class TorchDataset(Dataset):
 
 if __name__ == '__main__':
     augments = get_args()
-    for n_fold in range(4, 5):
+    for n_fold in range(augments.k_splits):
         augments.n_fold = n_fold
         trainer = Trainer(augments)
         trainer.train()
