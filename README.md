@@ -29,12 +29,10 @@ The first, second, and third columns correspond to #sc4031e0, #shhs1-204928, and
 ## License and Citation 📰
 The software is licensed under the Apache License 2.0. Please cite the following paper if you have used this code:
 ```
-@misc{lee2024neuronet,
-      title={NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG}, 
-      author={Cheol-Hui Lee and Hakseung Kim and Hyun-jee Han and Min-Kyung Jung and Byung C. Yoon and Dong-Joo Kim},
-      year={2024},
-      eprint={2404.17585},
-      archivePrefix={arXiv},
-      primaryClass={cs.HC}
+@article{lee2024neuronet,
+  title={NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG},
+  author={Lee, Cheol-Hui and Kim, Hakseung and Han, Hyun-jee and Jung, Min-Kyung and Yoon, Byung C and Kim, Dong-Joo},
+  journal={arXiv preprint arXiv:2404.17585},
+  year={2024}
 }
 ```
