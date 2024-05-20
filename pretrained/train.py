@@ -72,6 +72,7 @@ def get_args():
     parser.add_argument('--decoder_embed_dim', default=256, type=int)
     parser.add_argument('--decoder_heads', default=8, type=int)
     parser.add_argument('--decoder_depths', default=3, type=int)
+    parser.add_argument('--alpha', default=1.0, type=float)
 
     parser.add_argument('--projection_hidden', default=[1024, 512], type=list)
     parser.add_argument('--temperature', default=0.05, type=float)
@@ -137,7 +138,7 @@ class Trainer(object):
                 out = self.model(x, mask_ratio=self.args.mask_ratio)
                 recon_loss, contrastive_loss, (cl_labels, cl_logits) = out
 
-                loss = recon_loss + contrastive_loss
+                loss = recon_loss + self.args.alpha * contrastive_loss
                 loss.backward()
 
                 if (step + 1) % self.args.train_batch_accumulation == 0:
