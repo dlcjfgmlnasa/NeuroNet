@@ -33,8 +33,8 @@ class BackBone(nn.Module):
         self.inplanes7 = 32
 
         self.input_size = input_size
-        self.conv1 = nn.Conv1d(input_channel, 16, kernel_size=7, stride=2, padding=3, bias=False)
-        self.bn1 = nn.BatchNorm1d(16)
+        self.conv1 = nn.Conv1d(input_channel, 32, kernel_size=7, stride=2, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm1d(32)
         self.relu = nn.ELU(inplace=True)
         self.maxpool = nn.MaxPool1d(kernel_size=3, stride=2, padding=1)
 
