@@ -248,7 +248,7 @@ def frame_size(fs, second, time_window, time_step):
     return frame.shape[1], frame.shape[2]
 
 
-class NeuroNetEncoder(nn.Module):
+class NeuroNetEncoderWrapper(nn.Module):
     def __init__(self, fs: int, second: int, time_window: int, time_step: float,
                  frame_backbone, patch_embed, encoder_block, encoder_norm, cls_token, pos_embed,
                  final_length):
