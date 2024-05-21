@@ -11,7 +11,7 @@ import torch.optim as opt
 from mamba_ssm import Mamba
 from models.utils import model_size
 from torch.utils.data import Dataset, DataLoader
-from experiments.ssl_sleep.cm_eeg.model import ContraMaskedAutoEncoder, EncoderWrapper
+from models.neuronet.model import NeuroNet, NeuroNetEncoderWrapper
 from sklearn.metrics import accuracy_score, f1_score
 
 
@@ -253,7 +253,7 @@ class Trainer(object):
 
         save_path = os.path.join(self.args.ckpt_path, str(self.args.n_fold), 'fine_tuning', 'best_model.pth')
         torch.save({
-            'backbone_name': 'ContraMaskedAutoEncoder_FineTuning',
+            'backbone_name': 'NeuroNet_FineTuning',
             'model_state': model_state,
             'hyperparameter': self.args.__dict__,
             'result': {'real': real, 'pred': pred},
@@ -263,11 +263,11 @@ class Trainer(object):
     def get_pretrained_model(self):
         # 1. Prepared Pretrained Model
         model_parameter = self.ckpt['model_parameter']
-        pretrained_model = ContraMaskedAutoEncoder(**model_parameter)
+        pretrained_model = NeuroNet(**model_parameter)
         pretrained_model.load_state_dict(self.ckpt['model_state'])
 
         # 2. Encoder Wrapper
-        backbone = EncoderWrapper(
+        backbone = NeuroNetEncoderWrapper(
             fs=model_parameter['fs'], second=model_parameter['second'],
             time_window=model_parameter['time_window'], time_step=model_parameter['time_step'],
             frame_backbone=pretrained_model.frame_backbone,
@@ -310,15 +310,12 @@ class TorchDataset(Dataset):
         super().__init__()
         self.sfreq, self.rfreq = sfreq, rfreq
         self.info = mne.create_info(sfreq=sfreq, ch_types='eeg', ch_names=['Fp1'])
-        self.x, self.y = self.get_data(paths)
-        self.x, self.y = self.many_to_many(self.x,
-                                           temporal_context_length=temporal_context_length,
-                                           window_size=window_size), \
-                         self.many_to_many(self.y, temporal_context_length=temporal_context_length,
-                                           window_size=window_size)
+        self.x, self.y = self.get_data(paths,
+                                       temporal_context_length=temporal_context_length,
+                                       window_size=window_size)
         self.x, self.y = torch.tensor(self.x, dtype=torch.float32), torch.tensor(self.y, dtype=torch.long)
 
-    def get_data(self, paths):
+    def get_data(self, paths, temporal_context_length, window_size):
         total_x, total_y = [], []
         for path in paths:
             data = np.load(path)
@@ -327,6 +324,8 @@ class TorchDataset(Dataset):
             x = mne.EpochsArray(x, info=self.info)
             x = x.resample(self.rfreq)
             x = x.get_data().squeeze()
+            x = self.many_to_many(x, temporal_context_length, window_size)
+            y = self.many_to_many(x, temporal_context_length, window_size)
             total_x.append(x)
             total_y.append(y)
         total_x, total_y = np.concatenate(total_x), np.concatenate(total_y)
@@ -356,7 +355,7 @@ class TorchDataset(Dataset):
 
 if __name__ == '__main__':
     augments = get_args()
-    for n_fold in range(4, 5):
+    for n_fold in range(augments.n_fold):
         augments.n_fold = n_fold
         trainer = Trainer(augments)
         trainer.train()
