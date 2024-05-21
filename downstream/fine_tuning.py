@@ -354,7 +354,7 @@ class TorchDataset(Dataset):
 
 if __name__ == '__main__':
     augments = get_args()
-    for n_fold in range(augments.n_fold):
+    for n_fold in range(10):
         augments.n_fold = n_fold
         trainer = Trainer(augments)
         trainer.train()
