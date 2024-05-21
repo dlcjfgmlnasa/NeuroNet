@@ -168,7 +168,6 @@ class Trainer(object):
 
         self.sfreq, self.rfreq = self.ckpt['hyperparameter']['sfreq'], self.ckpt['hyperparameter']['rfreq']
         self.ft_paths, self.eval_paths = self.ckpt['paths']['ft_paths'], self.ckpt['paths']['eval_paths']
-        self.ft_paths = self.ft_paths + self.eval_paths[:int(len(self.eval_paths) // 4)]
         self.model = self.get_pretrained_model().to(device)
 
         self.optimizer = opt.AdamW(self.model.parameters(), lr=self.args.lr)
