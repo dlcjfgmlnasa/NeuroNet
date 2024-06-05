@@ -57,6 +57,7 @@ class NeuroNet(nn.Module):
         # Contrastive Learning
         o1, o2 = self.projectors(o1), self.projectors(o2)
         contrastive_loss, (labels, logits) = self.contrastive_loss(o1, o2)
+        print(contrastive_loss)
         return recon_loss, contrastive_loss, (labels, logits)
 
     def forward_latent(self, x: torch.Tensor):
@@ -106,8 +107,14 @@ class MaskedAutoEncoderViT(nn.Module):
         self.encoder_depths = encoder_depths
         self.mlp_ratio = 4.
 
+        self.input_size = (num_patches, encoder_embed_dim)
+        self.patch_size = (1, encoder_embed_dim)
+        self.grid_h = int(self.input_size[0] // self.patch_size[0])
+        self.grid_w = int(self.input_size[1] // self.patch_size[1])
+        self.num_patches = self.grid_h * self.grid_w
+
         # MAE Encoder
-        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, encoder_embed_dim), requires_grad=False)
+        self.pos_embed = nn.Parameter(torch.randn(1, self.num_patches + 1, encoder_embed_dim), requires_grad=False)
         self.encoder_block = nn.ModuleList([
             Block(encoder_embed_dim, encoder_heads, self.mlp_ratio, qkv_bias=True,
                   norm_layer=partial(nn.LayerNorm, eps=1e-6))
@@ -118,7 +125,7 @@ class MaskedAutoEncoderViT(nn.Module):
         # MAE Decoder
         self.decoder_embed = nn.Linear(encoder_embed_dim, decoder_embed_dim, bias=True)
         self.mask_token = nn.Parameter(torch.zeros(1, 1, decoder_embed_dim))
-        self.decoder_pos_embed = nn.Parameter(torch.zeros(1, num_patches, decoder_embed_dim), requires_grad=False)
+        self.decoder_pos_embed = nn.Parameter(torch.randn(1, self.num_patches, decoder_embed_dim), requires_grad=False)
         self.decoder_block = nn.ModuleList([
             Block(decoder_embed_dim, decoder_heads, self.mlp_ratio, qkv_bias=True,
                   norm_layer=partial(nn.LayerNorm, eps=1e-6))
@@ -126,6 +133,7 @@ class MaskedAutoEncoderViT(nn.Module):
         ])
         self.decoder_norm = nn.LayerNorm(decoder_embed_dim, eps=1e-6)
         self.decoder_pred = nn.Linear(decoder_embed_dim, input_size, bias=True)
+        self.initialize_weights()
 
     def forward(self, x, mask_ratio=0.8):
         latent, mask, ids_restore = self.forward_encoder(x, mask_ratio)
@@ -209,10 +217,6 @@ class MaskedAutoEncoderViT(nn.Module):
                                                              (self.grid_h, self.grid_w),
                                                              cls_token=False)
         self.decoder_pos_embed.data.copy_(torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
-
-        # initialize patch_embed like nn.Linear (instead of nn.Conv2d)
-        w = self.patch_embed.proj.weight.data
-        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
 
         # timm's trunc_normal_(std=.02) is effectively normal_(std=0.02) as cutoff is too big (2.)
         torch.nn.init.normal_(self.cls_token, std=.02)
