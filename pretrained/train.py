@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
+import os
 import sys
 sys.path.extend([os.path.abspath('.'), os.path.abspath('..')])
 
-import os
 import mne
 import torch
 import random
