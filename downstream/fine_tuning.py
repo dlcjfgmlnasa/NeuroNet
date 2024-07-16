@@ -324,7 +324,7 @@ class TorchDataset(Dataset):
             x = x.resample(self.rfreq)
             x = x.get_data().squeeze()
             x = self.many_to_many(x, temporal_context_length, window_size)
-            y = self.many_to_many(x, temporal_context_length, window_size)
+            y = self.many_to_many(y, temporal_context_length, window_size)
             total_x.append(x)
             total_y.append(y)
         total_x, total_y = np.concatenate(total_x), np.concatenate(total_y)
