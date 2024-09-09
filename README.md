@@ -1,6 +1,6 @@
 # NeuroNet: A Novel Hybrid Self-Supervised Learning Framework for Sleep Stage Classification Using Single-Channel EEG
 
->**Cheol-Hui Lee, Hakseung Kim, Hyun-jee Han, Min-Kyung Jung, Byung C. Yoon and Dong-Joo Kim**
+>**Choel-Hui Lee, Hakseung Kim, Hyun-jee Han, Min-Kyung Jung, Byung C. Yoon and Dong-Joo Kim**
 
 [[`Paper`](https://arxiv.org/abs/2404.17585)] [[`Paper with Code`](https://paperswithcode.com/paper/neuronet-a-novel-hybrid-self-supervised)] [[`BibTeX`](#license-and-citation)] 
 
