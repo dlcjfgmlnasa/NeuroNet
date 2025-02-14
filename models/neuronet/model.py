@@ -271,7 +271,7 @@ class NeuroNetEncoderWrapper(nn.Module):
 
         self.final_length = final_length
 
-    def forward(self, x):
+    def forward(self, x, semantic_token=True):
         # frame backbone
         x = self.make_frame(x)
         x = self.frame_backbone(x)
@@ -292,6 +292,9 @@ class NeuroNetEncoderWrapper(nn.Module):
             x = block(x)
 
         x = self.encoder_norm(x)
+
+        # get semantic information
+        x = torch.mean(x[:, 1:, :], dim=1)
         return x
 
     def make_frame(self, x):
